@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <!--
+        This pom builds the EAR artifact and includes the ejb module.
+    -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ejb31</groupId>
+    <artifactId>ejb31-ear</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>ear</packaging>
+    <name>ejb31: EAR</name>
+    <description>ejb31: EAR</description>
+
+    <parent>
+        <groupId>com.ejb31</groupId>
+        <artifactId>ejb31-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <!-- Dependency on the server side module so that it can be found by the ear plugin. -->
+        <dependency>
+            <groupId>com.ejb31</groupId>
+            <artifactId>ejb31-server-side</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <!-- Ear plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.3.2</version>
+                <!-- configuring the ear plugin -->
+                <configuration>
+                    <!-- Specify the artifact name for the EAR -->
+                    <finalName>ejb31</finalName>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <!-- specify the EJB module to include in the EAR -->
+                        <ejbModule>
+                            <groupId>com.ejb31</groupId>
+                            <artifactId>ejb31-server-side</artifactId>
+                        </ejbModule>
+                    </modules>
+                </configuration>
+            </plugin>
+            <!-- JBoss AS plugin to deploy ear -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.1.1.Final</version>
+                <configuration>
+                    <filename>ejb31.ear</filename>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+            <!-- Compiler plugin enforces Java 1.6 compatibility and activates
+          annotation processors -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
